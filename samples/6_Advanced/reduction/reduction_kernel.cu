@@ -260,10 +260,15 @@ reduce4(T *g_idata, T *g_odata, unsigned int n)
     {
         cg::coalesced_group active = cg::coalesced_threads();
 
+        int ws = warpSize;
         // Fetch final intermediate sum from 2nd warp
-        if (blockSize >=  64) mySum += sdata[tid + 32];
+        if (blockSize >=  64)
+            mySum += sdata[tid + 32];
+        else
+            ws = blockSize;
+
         // Reduce final warp using shuffle
-        for (int offset = warpSize/2; offset > 0; offset /= 2) 
+        for (int offset = ws/2; offset > 0; offset /= 2)
         {
             mySum += active.shfl_down(mySum, offset);
         }
@@ -376,10 +381,15 @@ reduce5(T *g_idata, T *g_odata, unsigned int n)
     {
         cg::coalesced_group active = cg::coalesced_threads();
 
+        int ws = warpSize;
         // Fetch final intermediate sum from 2nd warp
-        if (blockSize >=  64) mySum += sdata[tid + 32];
+        if (blockSize >=  64)
+            mySum += sdata[tid + 32];
+        else
+            ws = blockSize;
+
         // Reduce final warp using shuffle
-        for (int offset = warpSize/2; offset > 0; offset /= 2) 
+        for (int offset = ws/2; offset > 0; offset /= 2)
         {
             mySum += active.shfl_down(mySum, offset);
         }
@@ -504,10 +514,15 @@ reduce6(T *g_idata, T *g_odata, unsigned int n)
     {
         cg::coalesced_group active = cg::coalesced_threads();
 
+        int ws = warpSize;
         // Fetch final intermediate sum from 2nd warp
-        if (blockSize >=  64) mySum += sdata[tid + 32];
+        if (blockSize >=  64)
+            mySum += sdata[tid + 32];
+        else
+            ws = blockSize;
+
         // Reduce final warp using shuffle
-        for (int offset = warpSize/2; offset > 0; offset /= 2) 
+        for (int offset = ws/2; offset > 0; offset /= 2)
         {
              mySum += active.shfl_down(mySum, offset);
         }

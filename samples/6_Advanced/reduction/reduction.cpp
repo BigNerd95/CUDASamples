@@ -273,8 +273,6 @@ T benchmarkReduce(int  n,
 
         // check if kernel execution generated an error
         getLastCudaError("Kernel execution failed");
-        // Clear d_idata for later use as temporary buffer.
-        cudaMemset(d_idata, 0, n*sizeof(T));
 
         if (cpuFinalReduction)
         {
@@ -297,6 +295,8 @@ T benchmarkReduce(int  n,
 
             while (s > cpuFinalThreshold)
             {
+                // Clear d_idata for later use as temporary buffer.
+                cudaMemset(d_idata, 0, n*sizeof(T));
                 int threads = 0, blocks = 0;
                 getNumBlocksAndThreads(kernel, s, maxBlocks, maxThreads, blocks, threads);
                 cudaMemcpy(d_idata, d_odata, s*sizeof(T), cudaMemcpyDeviceToDevice);
